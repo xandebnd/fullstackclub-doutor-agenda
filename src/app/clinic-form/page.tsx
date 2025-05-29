@@ -1,3 +1,4 @@
+import ClinicForm from "@/app/clinic-form/components/form";
 import {
   Dialog,
   DialogContent,
@@ -5,8 +6,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-
-import ClinicForm from "./components/form";
 
 const ClinicFormPage = () => {
   return (

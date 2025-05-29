@@ -2,10 +2,10 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import { db } from "../../db";
-import { usersToClinicsTable } from "../../db/schema";
-import { auth } from "../../lib/auth";
-import SignOutButton from "./components/sign-out-button";
+import SignOutButton from "@/app/dashboard/components/sign-out-button";
+import { db } from "@/db";
+import { usersToClinicsTable } from "@/db/schema";
+import { auth } from "@/lib/auth";
 
 const DashboardPage = async () => {
   const session = await auth.api.getSession({

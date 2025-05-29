@@ -10,6 +10,13 @@ import {
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
@@ -22,15 +29,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-
-import { Avatar, AvatarFallback } from "../../../components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../../components/ui/dropdown-menu";
-import { authClient } from "../../../lib/auth-client";
+import { authClient } from "@/lib/auth-client";
 
 // Menu items.
 const items = [
@@ -105,7 +104,7 @@ const AppSidebar = () => {
                     <AvatarFallback>F</AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="text-sm">{session.data?.user.clinic.name}</p>
+                    <p className="text-sm">{session.data?.user.clinic?.name}</p>
                     <p className="text-muted-foreground text-sm">
                       {session.data?.user.email}
                     </p>

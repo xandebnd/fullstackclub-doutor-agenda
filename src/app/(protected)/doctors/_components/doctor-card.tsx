@@ -1,20 +1,22 @@
 "use client";
 
 import { CalendarIcon, ClockIcon, DollarSignIcon } from "lucide-react";
+import { useState } from "react";
 
-import { Avatar, AvatarFallback } from "../../../../components/ui/avatar";
-import { Badge } from "../../../../components/ui/badge";
-import { Button } from "../../../../components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-} from "../../../../components/ui/card";
-import { Dialog, DialogTrigger } from "../../../../components/ui/dialog";
-import { Separator } from "../../../../components/ui/separator";
-import { doctorsTable } from "../../../../db/schema";
-import { formatCurrencyInCents } from "../../../../helpers/currency";
+} from "@/components/ui/card";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { doctorsTable } from "@/db/schema";
+import { formatCurrencyInCents } from "@/helpers/currency";
+
 import { getAvailability } from "../_helpers/availability";
 import UpsertDoctorForm from "./upsert-doctor-form";
 
@@ -23,12 +25,20 @@ interface DoctorCardProps {
 }
 
 const DoctorCard = ({ doctor }: DoctorCardProps) => {
+  const [isUpsertDoctorDialogOpen, setIsUpsertDoctorDialogOpen] =
+    useState(false);
+
   const doctorInitials = doctor.name
     .split(" ")
+    .filter(
+      (word) => !["de", "da", "do", "das", "dos"].includes(word.toLowerCase()),
+    )
     .map((name) => name[0])
-    .join("");
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
 
-    const availability = getAvailability(doctor);
+  const availability = getAvailability(doctor);
 
   return (
     <Card>
@@ -61,11 +71,23 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
       </CardContent>
       <Separator />
       <CardFooter>
-        <Dialog>
+        <Dialog
+          open={isUpsertDoctorDialogOpen}
+          onOpenChange={setIsUpsertDoctorDialogOpen}
+        >
           <DialogTrigger asChild>
             <Button className="w-full">Ver detalhes</Button>
           </DialogTrigger>
-          <UpsertDoctorForm />
+          <UpsertDoctorForm
+            doctor={{
+              ...doctor,
+              availableToTime: availability.to.format("HH:mm:ss"),
+              availableFromTime: availability.from.format("HH:mm:ss"),
+            }}
+            onSuccess={() => {
+              setIsUpsertDoctorDialogOpen(false);
+            }}
+          />
         </Dialog>
       </CardFooter>
     </Card>

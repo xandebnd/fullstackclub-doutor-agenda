@@ -1,7 +1,6 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
-import SignOutButton from "@/app/(protected)/dashboard/_components/sign-out-button";
 import { auth } from "@/lib/auth";
 
 const DashboardPage = async () => {
@@ -19,8 +18,7 @@ const DashboardPage = async () => {
 
   return (
     <div>
-      {JSON.stringify(session?.user)}
-      <SignOutButton />
+      <p>Dashboard Page</p>
     </div>
   );
 };

@@ -12,16 +12,16 @@ const AddDoctorButton = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button>
-          <Plus />
-          Adicionar médico
-        </Button>
-      </DialogTrigger>
-      <UpsertDoctorForm onSuccess={() => setIsOpen(false)} />
-    </Dialog>
-  );
+			<Dialog open={isOpen} onOpenChange={setIsOpen}>
+				<DialogTrigger asChild>
+					<Button>
+						<Plus />
+						Adicionar médico
+					</Button>
+				</DialogTrigger>
+				<UpsertDoctorForm onSuccess={() => setIsOpen(false)} isOpen={isOpen} />
+			</Dialog>
+		);
 };
 
 export default AddDoctorButton;

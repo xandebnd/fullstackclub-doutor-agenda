@@ -11,33 +11,33 @@ import { auth } from "@/lib/auth";
 import { actionClient } from "@/lib/next-safe-action";
 
 export const deletePatient = actionClient
-	.schema(
-		z.object({
-			id: z.string().uuid(),
-		}),
-	)
-	.action(async ({ parsedInput }) => {
-		const session = await auth.api.getSession({
-			headers: await headers(),
-		});
+  .schema(
+    z.object({
+      id: z.string().uuid(),
+    }),
+  )
+  .action(async ({ parsedInput }) => {
+    const session = await auth.api.getSession({
+      headers: await headers(),
+    });
 
-		if (!session?.user) {
-			throw new Error("Unauthorized");
-		}
+    if (!session?.user) {
+      throw new Error("Unauthorized");
+    }
 
-		const patient = await db.query.patientsTable.findFirst({
-			where: eq(patientsTable.id, parsedInput.id),
-		});
+    const patient = await db.query.patientsTable.findFirst({
+      where: eq(patientsTable.id, parsedInput.id),
+    });
 
-		if (!patient) {
-			throw new Error("Paciente não encontrado");
-		}
+    if (!patient) {
+      throw new Error("Paciente não encontrado");
+    }
 
-		if (patient.clinicId !== session.user.clinic?.id) {
-			throw new Error("Paciente não encontrado");
-		}
+    if (patient.clinicId !== session.user.clinic?.id) {
+      throw new Error("Paciente não encontrado");
+    }
 
-		await db.delete(patientsTable).where(eq(patientsTable.id, parsedInput.id));
+    await db.delete(patientsTable).where(eq(patientsTable.id, parsedInput.id));
 
-		revalidatePath("/patients");
-	});
+    revalidatePath("/patients");
+  });

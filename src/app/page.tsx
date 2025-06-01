@@ -1,5 +1,16 @@
-import { Button } from "@/components/ui/button";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
-export default function Home() {
-	return <Button>Bootcamp</Button>;
-}
+import { auth } from "../lib/auth";
+
+export const Home = async () => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session?.user) {
+    redirect("/authentication");
+  } else {
+    redirect("/dashboard");
+  }
+};

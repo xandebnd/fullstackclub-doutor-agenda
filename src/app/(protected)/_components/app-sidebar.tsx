@@ -70,6 +70,13 @@ const AppSidebar = () => {
     });
   };
 
+  const clinicName = session.data?.user.clinic?.name
+    .split(" ")
+    .map((name) => name[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <Sidebar>
       <SidebarHeader className="border-b p-4">
@@ -101,7 +108,7 @@ const AppSidebar = () => {
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton size="lg">
                   <Avatar>
-                    <AvatarFallback>F</AvatarFallback>
+                    <AvatarFallback>{clinicName}</AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="text-sm">{session.data?.user.clinic?.name}</p>

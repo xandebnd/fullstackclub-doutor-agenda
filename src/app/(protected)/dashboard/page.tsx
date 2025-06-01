@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import { Calendar } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -14,9 +15,19 @@ import {
 import { getDashboard } from "@/data/get-dashboard";
 import { auth } from "@/lib/auth";
 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../components/ui/card";
+import { DataTable } from "../../../components/ui/data-table";
+import { appointmentsTableColumns } from "../appointments/_components/table-columns";
 import { AppointmentsChart } from "./_components/appointments-chart";
 import { DatePicker } from "./_components/date-pick";
 import StatsCards from "./_components/stats-cards";
+import TopDoctors from "./_components/top-doctors";
+import TopSpecialties from "./_components/top-specialties";
 
 interface DashboardProps {
   searchParams: Promise<{
@@ -85,12 +96,42 @@ const DashboardPage = async ({ searchParams }: DashboardProps) => {
       <PageContent>
         <StatsCards
           totalRevenue={totalRevenue.total ? Number(totalRevenue.total) : null}
-          totalAppointments={totalAppointments.total as number}
-          totalPatients={totalPatients.total as number}
-          totalDoctors={totalDoctors.total as number}
+          totalAppointments={totalAppointments.total}
+          totalPatients={totalPatients.total}
+          totalDoctors={totalDoctors.total}
         />
-        <div className="grid grid-cols-[2.25fr_1fr]">
+        <div className="grid grid-cols-[2.25fr_1fr] gap-4">
           <AppointmentsChart dailyAppointmentsData={dailyAppointmentsData} />
+          <TopDoctors doctors={topDoctors} />
+        </div>
+        <div className="grid grid-cols-[2.25fr_1fr] gap-4">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-3">
+                <Calendar className="text-muted-foreground" />
+                <CardTitle className="text-base">
+                  Agendamentos de hoje
+                </CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <DataTable
+                columns={appointmentsTableColumns}
+                data={todayAppointments
+                  .filter(
+                    (appointment) =>
+                      appointment.patient !== null &&
+                      appointment.doctor !== null,
+                  )
+                  .map((appointment) => ({
+                    ...appointment,
+                    patient: appointment.patient!,
+                    doctor: appointment.doctor!,
+                  }))}
+              />
+            </CardContent>
+          </Card>
+          <TopSpecialties topSpecialties={topSpecialties} />
         </div>
       </PageContent>
     </PageContainer>

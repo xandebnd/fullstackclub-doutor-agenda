@@ -17,8 +17,10 @@ interface Params {
 }
 
 export const getDashboard = async ({ from, to, session }: Params) => {
+
   const chartStartDate = dayjs().subtract(10, "days").startOf("day").toDate();
   const chartEndDate = dayjs().add(10, "days").endOf("day").toDate();
+
   const [
     [totalRevenue],
     [totalAppointments],
@@ -133,6 +135,7 @@ export const getDashboard = async ({ from, to, session }: Params) => {
       .groupBy(sql`DATE(${appointmentsTable.date})`)
       .orderBy(sql`DATE(${appointmentsTable.date})`),
   ]);
+
   return {
     totalRevenue,
     totalAppointments,

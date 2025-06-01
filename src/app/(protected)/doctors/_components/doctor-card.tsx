@@ -44,7 +44,8 @@ interface DoctorCardProps {
 }
 
 const DoctorCard = ({ doctor }: DoctorCardProps) => {
-	const [isUpsertDoctorDialogOpen, setIsUpsertDoctorDialogOpen] = useState(false);
+	const [isUpsertDoctorDialogOpen, setIsUpsertDoctorDialogOpen] =
+		useState(false);
 
 	const doctorInitials = doctor.name
 		.split(" ")
@@ -90,11 +91,11 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
 			<CardContent className="flex flex-col gap-2">
 				<Badge variant="outline">
 					<CalendarIcon className="mr-1" />
-					{availability.from.format("dddd")} - {availability.to.format("dddd")}
+					{availability.from.format("dddd")} a {availability.to.format("dddd")}
 				</Badge>
 				<Badge variant="outline">
 					<ClockIcon className="mr-1" />
-					{availability.from.format("HH:mm")} às{" "}
+					{availability.from.format("HH:mm")} as{" "}
 					{availability.to.format("HH:mm")}
 				</Badge>
 				<Badge variant="outline">
@@ -114,16 +115,13 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
 					<UpsertDoctorForm
 						doctor={{
 							...doctor,
-							availableToTime: availability.to.format("HH:mm:ss"),
 							availableFromTime: availability.from.format("HH:mm:ss"),
+							availableToTime: availability.to.format("HH:mm:ss"),
 						}}
-						onSuccess={() => {
-							setIsUpsertDoctorDialogOpen(false);
-						}}
+						onSuccess={() => setIsUpsertDoctorDialogOpen(false)}
 						isOpen={isUpsertDoctorDialogOpen}
 					/>
 				</Dialog>
-
 				<AlertDialog>
 					<AlertDialogTrigger asChild>
 						<Button variant="outline" className="w-full">
@@ -134,7 +132,7 @@ const DoctorCard = ({ doctor }: DoctorCardProps) => {
 					<AlertDialogContent>
 						<AlertDialogHeader>
 							<AlertDialogTitle>
-								Tem certeza que deseja deletar este médico?
+								Tem certeza que deseja deletar esse médico?
 							</AlertDialogTitle>
 							<AlertDialogDescription>
 								Essa ação não pode ser revertida. Isso irá deletar o médico e

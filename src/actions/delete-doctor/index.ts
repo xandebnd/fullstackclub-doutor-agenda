@@ -11,29 +11,29 @@ import { auth } from "../../lib/auth";
 import { actionClient } from "../../lib/next-safe-action";
 
 export const deleteDoctor = actionClient
-  .schema(z.object({ id: z.string().uuid() }))
-  .action(async ({ parsedInput }) => {
-    const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+	.schema(z.object({ id: z.string().uuid() }))
+	.action(async ({ parsedInput }) => {
+		const session = await auth.api.getSession({
+			headers: await headers(),
+		});
 
-    if (!session?.user) {
-      throw new Error("Usuário não autenticado");
-    }
+		if (!session?.user) {
+			throw new Error("Usuário não autenticado");
+		}
 
-    const doctor = await db.query.doctorsTable.findFirst({
-      where: eq(doctorsTable.id, parsedInput.id),
-    });
+		const doctor = await db.query.doctorsTable.findFirst({
+			where: eq(doctorsTable.id, parsedInput.id),
+		});
 
-    if (!doctor) {
-      throw new Error("Doutor não encontrado");
-    }
+		if (!doctor) {
+			throw new Error("Doutor não encontrado");
+		}
 
-    if (doctor.clinicId !== session.user.clinic?.id) {
-      throw new Error("Doutor não pertence a essa clínica");
-    }
+		if (doctor.clinicId !== session.user.clinic?.id) {
+			throw new Error("Doutor não pertence a essa clínica");
+		}
 
-    await db.delete(doctorsTable).where(eq(doctorsTable.id, parsedInput.id));
+		await db.delete(doctorsTable).where(eq(doctorsTable.id, parsedInput.id));
 
-    revalidatePath("/doctors");
-  });
+		revalidatePath("/doctors");
+	});

@@ -8,55 +8,55 @@ import * as schema from "@/db/schema";
 import { db } from "../db";
 
 export const auth = betterAuth({
-  database: drizzleAdapter(db, {
-    provider: "pg",
-    usePlural: true,
-    schema,
-  }),
-  socialProviders: {
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    },
-  },
-  plugins: [
-    customSession(async ({ user, session }) => {
-      const clinics = await db.query.usersToClinicsTable.findMany({
-        where: eq(schema.usersToClinicsTable.userId, user.id),
-        with: {
-          clinic: true,
-        },
-      });
+	database: drizzleAdapter(db, {
+		provider: "pg",
+		usePlural: true,
+		schema,
+	}),
+	socialProviders: {
+		google: {
+			clientId: process.env.GOOGLE_CLIENT_ID as string,
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+		},
+	},
+	plugins: [
+		customSession(async ({ user, session }) => {
+			const clinics = await db.query.usersToClinicsTable.findMany({
+				where: eq(schema.usersToClinicsTable.userId, user.id),
+				with: {
+					clinic: true,
+				},
+			});
 
-      const clinic = clinics?.[0];
+			const clinic = clinics?.[0];
 
-      return {
-        user: {
-          ...user,
-          clinic: clinic.clinicId
-            ? {
-                id: clinic?.clinicId,
-                name: clinic?.clinic?.name,
-              }
-            : undefined,
-        },
-        session,
-      };
-    }),
-  ],
-  user: {
-    modelName: "usersTable",
-  },
-  session: {
-    modelName: "sessionsTable",
-  },
-  account: {
-    modelName: "accountsTable",
-  },
-  verification: {
-    modelName: "verificationsTable",
-  },
-  emailAndPassword: {
-    enabled: true,
-  },
+			return {
+				user: {
+					...user,
+					clinic: clinic.clinicId
+						? {
+								id: clinic?.clinicId,
+								name: clinic?.clinic?.name,
+							}
+						: undefined,
+				},
+				session,
+			};
+		}),
+	],
+	user: {
+		modelName: "usersTable",
+	},
+	session: {
+		modelName: "sessionsTable",
+	},
+	account: {
+		modelName: "accountsTable",
+	},
+	verification: {
+		modelName: "verificationsTable",
+	},
+	emailAndPassword: {
+		enabled: true,
+	},
 });

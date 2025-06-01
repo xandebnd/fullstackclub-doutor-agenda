@@ -4,13 +4,13 @@ import { redirect } from "next/navigation";
 
 import { DataTable } from "@/components/ui/data-table";
 import {
-  PageActions,
-  PageContainer,
-  PageContent,
-  PageDescription,
-  PageHeader,
-  PageHeaderContent,
-  PageTitle,
+	PageActions,
+	PageContainer,
+	PageContent,
+	PageDescription,
+	PageHeader,
+	PageHeaderContent,
+	PageTitle,
 } from "@/components/ui/page-container";
 import { db } from "@/db";
 import { patientsTable } from "@/db/schema";

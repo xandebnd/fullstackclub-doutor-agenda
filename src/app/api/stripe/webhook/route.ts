@@ -29,16 +29,24 @@ export const POST = async (request: Request) => {
         throw new Error("Subscription ID not found");
       }
 
-      const subscription = event.data.object.parent?.subscription_details?.subscription
+      const { subscription, metadata } = event.data.object.parent
+        ?.subscription_details as {
+        subscription: string;
+        metadata: {
+          userId: string;
+        };
+      };
 
       if (!subscription) {
         throw new Error("Subscription not found");
       }
-      const userId = event.data.object.parent?.subscription_details?.metadata?.userId as string;
+
+      const userId = metadata?.userId as string;
 
       if (!userId) {
         throw new Error("User ID not found");
       }
+
       await db
         .update(usersTable)
         .set({
